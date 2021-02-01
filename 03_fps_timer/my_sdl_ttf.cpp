@@ -23,10 +23,30 @@ void Font::renderInteger(Point tl,int d) {
     char number[256];
     sprintf(number, "%d", d);
     int prevx = tl.x;
-    for(int i=0; i < strlen(number); ++i) {
+    for(uint32_t i=0; i < strlen(number); ++i) {
         int idx = number[i] - '0';
         SDL_Rect rect = {prevx, tl.y, digits[idx].width, digits[idx].height};
         prevx += digits[idx].width;
         SDL_RenderCopy(s->gRenderer, digits[idx].texture, NULL, &rect);
     }
+}
+
+void Font::renderFloat(Point tl, double d) {
+  char number[256];
+  sprintf( number, "%lf", d);
+  int prevx = tl.x;
+  for(uint32_t i=0; i < strlen(number); ++i ) {
+    int idx = number[i] - '0';
+    SDL_Rect rect = {prevx, tl.y, digits[idx].width, digits[idx].height};
+    prevx += digits[idx].width;
+    SDL_RenderCopy(s->gRenderer, digits[idx].texture, NULL, &rect);
+  }
+}
+
+void Font::renderText(Point tl, std::string str) {
+  SDL_Surface *surface = TTF_RenderText_Solid(font, str.c_str(), color);
+  SDL_Texture *texture = SDL_CreateTextureFromSurface(s->gRenderer, surface);
+  SDL_Rect rect = { tl.x, tl.y, surface->w, surface->h};
+  SDL_RenderCopy(s->gRenderer, texture, NULL, &rect);
+  SDL_FreeSurface(surface);
 }
