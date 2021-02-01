@@ -19,8 +19,7 @@ class Font {
     SDL_Color color;
     SDL *s;
     public:
-    Font(std::string path, SDL *s);
-    void init();
+    void init(std::string path, SDL *s);
     void renderInteger(Point tl,int d);
     void renderFloat(Point tl, double d);
     void renderText(Point tl, std::string str);
