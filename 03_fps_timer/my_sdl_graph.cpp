@@ -1,6 +1,6 @@
 #include "my_sdl_graph.h"
 
-DrawingLibrary::DrawingLibrary(SDL *s) { this->s = s; }
+void DrawingLibrary::init(SDL *s) { this->s = s; }
 void DrawingLibrary::Line(Point tl, Point br) {
   SDL_RenderDrawLine(s->gRenderer, tl.x, tl.y, br.x, br.y);
 }

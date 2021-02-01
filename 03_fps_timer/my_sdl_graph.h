@@ -13,7 +13,7 @@ class DrawingLibrary {
   SDL *s;
 
 public:
-  DrawingLibrary(SDL *);
+  void init(SDL *);
   /** Setting color to the SDL renderer.
    *
    * Use @see RGB or @see RGBA to get an uint32_t to use as color.
