@@ -14,7 +14,7 @@ void Font::init() {
     char digit = '0' + i;
     SDL_Surface *surface = TTF_RenderText_Solid(font, &digit, color);
     SDL_Texture *texture = SDL_CreateTextureFromSurface(s->gRenderer, surface);
-    digits.push_back(Text{texture, (uint8_t)surface->w, (uint8_t)surface->h});
+    digits.push_back(Text{&texture, (uint8_t)surface->w, (uint8_t)surface->h});
     SDL_FreeSurface(surface);
   }
 }
@@ -27,7 +27,7 @@ void Font::renderInteger(Point tl,int d) {
         int idx = number[i] - '0';
         SDL_Rect rect = {prevx, tl.y, digits[idx].width, digits[idx].height};
         prevx += digits[idx].width;
-        SDL_RenderCopy(s->gRenderer, digits[idx].texture, NULL, &rect);
+        SDL_RenderCopy(s->gRenderer, *(digits[idx].texture), NULL, &rect);
     }
 }
 
@@ -39,7 +39,7 @@ void Font::renderFloat(Point tl, double d) {
     int idx = number[i] - '0';
     SDL_Rect rect = {prevx, tl.y, digits[idx].width, digits[idx].height};
     prevx += digits[idx].width;
-    SDL_RenderCopy(s->gRenderer, digits[idx].texture, NULL, &rect);
+    SDL_RenderCopy(s->gRenderer, *(digits[idx].texture), NULL, &rect);
   }
 }
 

@@ -8,7 +8,7 @@
 #include "misc.h"
 
 struct Text {
-    SDL_Texture *texture;
+    SDL_Texture **texture;
     uint8_t width;
     uint8_t height;
 };
