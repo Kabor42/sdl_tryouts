@@ -2,7 +2,7 @@ OBJS = 02_rendering_SDL.cpp
 
 CC = g++
 
-CFLAGS = -Wall -Werror -std=c++14 -pedantic
+CFLAGS = -Wall -Werror -std=c++14 -pedantic -g -ggdb
 LDFLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf
 OBJ_NAME = 02
 
