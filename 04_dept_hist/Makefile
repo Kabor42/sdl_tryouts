@@ -62,7 +62,7 @@ SDL_LFLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf
 # C flags
 CFLAGS := -std=c11
 # C++ flags
-CXXFLAGS := -std=c++11
+CXXFLAGS := -std=c++14
 # C/C++ flags
 CPPFLAGS := -g -ggdb -Wall -Wextra -pedantic
 # linker flags

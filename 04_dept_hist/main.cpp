@@ -25,7 +25,6 @@ public:
     astra::CoordinateMapper mapper = depthStream.coordinateMapper();
 
     if (depthFrame.is_valid()) {
-      const short *depthData = depthFrame.data();
       uint32_t width = depthFrame.width();
       uint32_t height = depthFrame.height();
       uint32_t frameIndex = depthFrame.frame_index();
@@ -53,7 +52,18 @@ public:
       printf("FI[%d],V[%d],W[%d,%d,%d],D[%d,%d,%d]\n", frameIndex, middle, w[0],
              w[1], w[2], d[0], d[1], d[2]);
       fflush(stdout);
-      dh->display(buffer_.get());
+
+      // Create wolrd and depth from buffered data to send to display. //
+      short data[depthFrame.length()];
+      for(uint32_t w=0; w < width; ++w)
+        for(uint32_t h=0; h < height; ++h) {
+          uint32_t idx = w + (width * h);
+          mapper.convert_depth_to_world(w, h, buffer_[idx], worldX, worldY, worldZ);
+          mapper.convert_world_to_depth(worldX, worldY, worldZ, depthX, depthY, depthZ);
+          data[idx] = depthZ;
+        }
+      //dh->display(buffer_.get());
+      dh->display(data);
     }
   }
 };
@@ -64,7 +74,7 @@ int main(int argc, char *argv[]) {
   DepthHist dh(0, 8000, 128, 480, 640);
   SDL_Event e;
 
-  auto fpsDelay = std::chrono::milliseconds(33);
+  auto fpsDelay = std::chrono::milliseconds(332);
 
   astra::StreamSet streamSet;
   astra::StreamReader reader = streamSet.create_reader();

@@ -1,8 +1,8 @@
 #include "../include/my_sdl_ttf.h"
 
-void Font::init(std::string path, SDL *s) {
+void Font::init(std::string path, SDL *s, int size) {
   TTF_Init();
-  font = TTF_OpenFont(path.c_str(), 24);
+  font = TTF_OpenFont(path.c_str(), size);
   if (NULL == font)
     printf("Couldn't open font!\nTFF_Error: %s\n", TTF_GetError());
 

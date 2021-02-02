@@ -3,6 +3,7 @@
 
 #include "my_sdl_graph.h"
 #include "my_sdl_helper.h"
+#include "my_sdl_ttf.h"
 #include <chrono>
 #include <cmath>
 #include <cstdio>
@@ -52,7 +53,11 @@ int main(int argc, char *argv[]) {
   SDL s;
   sSDL_init_struct(&s);
 
-  DrawingLibrary dl(&s);
+  Font ft;
+  ft.init("/usr/share/fonts/truetype/hack/Hack-Regular.ttf", &s);
+
+  DrawingLibrary dl;
+  dl.init(&s);
 
   auto fpsDelay = std::chrono::milliseconds(33);
   auto t1 = std::chrono::high_resolution_clock::now();
@@ -99,8 +104,9 @@ int main(int argc, char *argv[]) {
           }
 
         // s.testDrawing(&s);
-        dl.test();
+        // dl.test();
 
+        dl.ClrScr();
         dl.setColor(RGB(0, 0, 0));
         dl.Line(Point{10, (uint16_t)(s.SCREEN_HEIGHT - 20)},
                 Point{(uint16_t)(s.SCREEN_WIDHT - 10),
@@ -123,13 +129,14 @@ int main(int argc, char *argv[]) {
         auto diff = t2 - t1;
         if (diff < fpsDelay)
           std::this_thread::sleep_until(t1 + fpsDelay);
-        /*
         printf("              \r");
-        printf("%ld/%ldms",
+        printf(
+            "%ld/%ldms",
             std::chrono::duration_cast<std::chrono::milliseconds>(diff).count(),
-            std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now()
-        - t1).count()); fflush(stdout);
-        */
+            std::chrono::duration_cast<std::chrono::milliseconds>(
+                std::chrono::high_resolution_clock::now() - t1)
+                .count());
+        fflush(stdout);
       }
     }
   }

@@ -33,3 +33,4 @@
 
 #ccls completion
 .ccls-cache
+*compile_commands.json

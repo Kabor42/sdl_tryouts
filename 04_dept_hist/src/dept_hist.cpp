@@ -6,7 +6,7 @@ DepthHist::DepthHist(uint32_t min, uint32_t max, uint32_t bins, uint32_t height,
                      uint32_t width) {
   sSDL_init_struct(&s);
   s.init(&s);
-  ft.init("/usr/share/fonts/truetype/hack/Hack-Regular.ttf", &s);
+  ft.init("/usr/share/fonts/truetype/hack/Hack-Regular.ttf", &s, 8);
   dl.init(&s);
 
   this->max = max;
@@ -22,9 +22,10 @@ void DepthHist::step() {
 void DepthHist::display(const short *data) {
   std::vector<uint32_t> hist(bins, 0);
   uint16_t hist_max = data[0];
-  uint32_t dh = static_cast<uint32_t>(floor(((max - min) * 1.0f) / bins));
+  double dh = floor(((max - min) * 1.0f) / bins);
   for (uint32_t i = 0; i < width * height; ++i) {
-    uint32_t idx = static_cast<uint32_t>(floor((data[i] * 1.0f) / bins));
+    // uint32_t idx = static_cast<uint32_t>(floor((data[i] * 1.0f) / bins));
+    uint32_t idx = static_cast<uint32_t>(floor(data[i]/dh));
     hist_max = (data[i] > hist_max) ? data[i] : hist_max;
     hist[idx]++;
   }
@@ -42,7 +43,7 @@ void DepthHist::display(const short *data) {
   uint32_t old_color = dl.getColor();
   dl.setColor(RGB(51,0,25));
 
-  for (uint32_t i = 0; i < bins; ++i) {
+  for (uint32_t i = 1; i < bins; ++i) {
     double dh = hist[i] * screne_height_ratio;
     dl.FillRect(Point{x, y},
                 dw, (uint16_t)(floor(dh)));
@@ -82,11 +83,15 @@ void DepthHist::draw_coordinates() {
       Point{(uint16_t)(s.SCREEN_WIDHT - 10), (uint16_t)(s.SCREEN_HEIGHT - 20)});
   dl.Line(Point{20, 20}, Point{20, (uint16_t)(s.SCREEN_HEIGHT - 10)});
 
-  double df = (s.SCREEN_WIDHT - 20) / 256.0f;
-  for (uint16_t i = 0; i < 256; ++i) {
-    if (i % 8 == 0)
+  double df = (s.SCREEN_WIDHT - 20) / bins;
+  for (uint16_t i = 0; i <= bins; ++i) {
+    if (i % 8 == 0) {
       dl.Line(
           Point{(uint16_t)(20 + (i * df)), (uint16_t)(s.SCREEN_HEIGHT - 10)},
           Point{(uint16_t)(20 + (i * df)), (uint16_t)(s.SCREEN_HEIGHT - 30)});
+      char num[8] = {0};
+      sprintf(num, "%1.1lf", i * (((max-min)*1.0f)/bins)/1000.0f);
+      ft.renderText(Point{(uint16_t)(15 + (i*df)),(uint16_t)(s.SCREEN_HEIGHT - 10)}, num); 
+    }
   }
 }
